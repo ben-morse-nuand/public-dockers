@@ -1,0 +1,63 @@
+# When copying this to make a new file
+# copy and replace all occurrences of the following:
+#                    ############
+name: Build and push username-1 Docker
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+    # Skip build unless these paths have changed
+    paths:
+      - 'username-1/**'
+      - '.github/workflows/username-1.yml'
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+
+jobs:
+  build:
+    name: Build and push username-1
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      # https://github.com/easimon/maximize-build-space/blob/master/action.yml
+      - name: Maximize build space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+
+      - name: Get dockerfile repo
+        uses: actions/checkout@v3
+
+      # Login against a Docker registry except on PR
+      # https://github.com/docker/login-action
+      - name: Log into registry ${{ env.REGISTRY }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        working-directory: ./username-1
+        run: |
+          TAG=$(date -u +%Y%m%d%H%M%S)
+          docker build . --tag ghcr.io/${{github.repository}}/username-1:$TAG
+          docker push ghcr.io/${{github.repository}}/username-1:$TAG
+          docker tag ghcr.io/${{github.repository}}/username-1:$TAG ghcr.io/${{github.repository}}/username-1:latest
+          docker push ghcr.io/${{github.repository}}/username-1:latest
