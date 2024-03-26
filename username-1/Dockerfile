@@ -20,5 +20,6 @@ RUN echo "W3NhZmVdCglkaXJlY3RvcnkgPSAqCg==" | base64 -d > $HOME/.gitconfig
 RUN sudo git config --global --add safe.directory '*'
 
 RUN git config --global --add safe.directory /__w/privatecast/privatecast
+RUN sudo git config --global --add safe.directory /__w/privatecast/privatecast
 
 WORKDIR $HOME
