@@ -17,5 +17,6 @@ ENV HOME=/home/${username}
 
 # trust git folders with different owners
 RUN echo "W3NhZmVdCglkaXJlY3RvcnkgPSAqCg==" | base64 -d > $HOME/.gitconfig
+RUN sudo git config --global --add safe.directory '*'
 
 WORKDIR $HOME
