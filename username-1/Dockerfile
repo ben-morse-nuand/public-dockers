@@ -14,4 +14,8 @@ RUN echo "%${username} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER ${username}
 ENV HOME=/home/${username}
 
+
+# trust git folders with different owners
+RUN echo "W3NhZmVdCglkaXJlY3RvcnkgPSAqCg==" | base64 -d > $HOME/.gitconfig
+
 WORKDIR $HOME
