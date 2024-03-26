@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
 apt-get upgrade -y && \
-apt-get install -y tar python3 nano sudo jq git \
+apt-get install -y tar python3 nano sudo jq git make \
 && apt-get autoremove -y && \
 apt-get clean
 
