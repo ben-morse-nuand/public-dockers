@@ -18,6 +18,9 @@ RUN sudo groupadd -g 127 docker
 RUN sudo useradd -u 1001 -g 127 -ms /bin/bash runner
 RUN echo "%runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+RUN usermod -aG docker github
+RUN usermod -aG docker runner
+
 USER ${username}
 
 # trust git folders with different owners
