@@ -15,7 +15,8 @@ ENV HOME=/home/${username}
 
 RUN sudo groupadd -g 127 docker
 # RUN sudo useradd -u 1001 -g 127 -c ' ' -m -d /home/runner -s /bin/bash runner
-RUN sudo useradd -u 1001 -g 127 -ms /bin/bash runner
+# RUN sudo useradd -u 1001 -g 127 -ms /bin/bash runner
+RUN sudo useradd -u 1001 -ms /bin/bash runner
 RUN echo "%runner ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN usermod -aG docker github
